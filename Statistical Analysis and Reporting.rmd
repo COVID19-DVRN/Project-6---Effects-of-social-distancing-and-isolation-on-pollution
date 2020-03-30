@@ -37,19 +37,19 @@ library(ggfortify)
 
 ### Pollution Data
 
-Data on PM 2.5 concentration (in μg/m3), were retrieved from all atmospheric sensor stations in each state and aggregated to output a single value per day per state from December 2018 to March 2020. Data was made freely available by the [United States Environmental Protection Agency](https://www.epa.gov/outdoor-air-quality-data/download-daily-data).
+Data on PM 2.5 concentration (in μg/m3), were retrieved from all atmospheric sensor stations in each state and aggregated to output a single value per day per state from January 2018 to March 2020. Data was made freely available by the [United States Environmental Protection Agency](https://www.epa.gov/outdoor-air-quality-data/download-daily-data).
 
 Python code can be viewed [here](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/PM%20Emissions/Merged%20Pollution%20Data/Pollution%20Data%20Extraction.ipynb).
 
 ### Qualitative Measures for Social Distancing Levels
 
-Level of social distancing measures was classified using 4 levels of lockdown from lowest to highest: normal level (no restrictions on movement), emergency state, school shut down and shelter-in-place. Data was categorized manually using [readily available websites](https://en.wikipedia.org/wiki/Timeline_of_the_2020_coronavirus_pandemic_in_the_United_States) from December 2018 to March 2020. These can be automated by use of web scraping in the future.
+Level of social distancing measures was classified using 4 levels of lockdown from lowest to highest: normal level (no restrictions on movement), emergency state, school shut down and shelter-in-place. Data was categorized manually using [readily available websites](https://en.wikipedia.org/wiki/Timeline_of_the_2020_coronavirus_pandemic_in_the_United_States) from January 2018 to March 2020. These can be automated by use of web scraping in the future.
 
 Raw data files can be viewed [here](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/tree/master/Social%20Distancing%20Levels). 
 
 ### COVID-19 Cases
 
-When examining the effect of border lockdown level on pollution levels and of social isolation level on pollution levels, it appears that the number of incident cases of COVID-19 may be directly associated with both exposures (border lockdown level and social isolation level) and indirectly associated with the outcome (pollution levels). In effect, an increase in COVID-19 cases would suggest that stricter measures would be put in place to limit infection transmission. An increase in COVID-19 cases may also suggest a limit in workforce supply, thereby limiting pollution caused by transport and industrial activity for example. These associations imply that the variable fits the classical criteria for confounding. Number of new incident cases per state from December 2018 to March 2020 was determined using a [publicly available dataset](https://github.com/nytimes/covid-19-data).
+When examining the effect of border lockdown level on pollution levels and of social isolation level on pollution levels, it appears that the number of incident cases of COVID-19 may be directly associated with both exposures (border lockdown level and social isolation level) and indirectly associated with the outcome (pollution levels). In effect, an increase in COVID-19 cases would suggest that stricter measures would be put in place to limit infection transmission. An increase in COVID-19 cases may also suggest a limit in workforce supply, thereby limiting pollution caused by transport and industrial activity for example. These associations imply that the variable fits the classical criteria for confounding. Number of new incident cases per state from January 2018 to March 2020 was determined using a [publicly available dataset](https://github.com/nytimes/covid-19-data).
 
 Python code can be viewed [here](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/COVID19%20Cases/covid_cases_code.ipynb).
 
