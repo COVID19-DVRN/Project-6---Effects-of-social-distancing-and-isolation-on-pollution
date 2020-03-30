@@ -1,0 +1,227 @@
+---
+title: "Effects of Social Distancing and Border Lockdowns on Pollution in 6 Different States in the USA"
+subtitle: "Sameeha Patel, Reem AlRowaili, Luca Martial - March 29th 2020"
+author:
+output:
+  html_document:
+    toc: true
+    toc_float: false
+    number_sections: false
+    toc_depth: 3
+    keep_md: false
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r include = FALSE}
+## ---- Setup ------------------------------------------------------------------
+knitr::opts_chunk$set(
+  echo = TRUE,          # show code
+  warning = FALSE,       # set as TRUE to show warnings
+  message = FALSE,      # set as TRUE to show messages
+  cache = FALSE,        # set to TRUE to save results from last compilation
+  fig.align = "center"  # center figures
+)
+
+# Loading packages
+library(ggplot2)
+library(tidyverse)
+library(anytime)
+library(GGally)
+library(ggfortify)
+```
+
+## Data Extraction
+
+*Note: all extractions attempt to limit data to 6 US states for the purposes of the project: Washington, New York, Massachusetts, California, Illinois and Wisconsin.*
+
+### Pollution Data
+
+Data on PM 2.5 concentration (in μg/m3), were retrieved from all atmospheric sensor stations in each state and aggregated to output a single value per day per state from December 2018 to March 2020. Data was made freely available by the [United States Environmental Protection Agency](https://www.epa.gov/outdoor-air-quality-data/download-daily-data).
+
+Python code can be viewed [here](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/PM%20Emissions/Merged%20Pollution%20Data/Pollution%20Data%20Extraction.ipynb).
+
+### Qualitative Measures for Social Distancing Levels
+
+Level of social distancing measures was classified using 4 levels of lockdown from lowest to highest: normal level (no restrictions on movement), emergency state, school shut down and shelter-in-place. Data was categorized manually using [readily available websites](https://en.wikipedia.org/wiki/Timeline_of_the_2020_coronavirus_pandemic_in_the_United_States) from December 2018 to March 2020. These can be automated by use of web scraping in the future.
+
+Raw data files can be viewed [here](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/tree/master/Social%20Distancing%20Levels). 
+
+### COVID-19 Cases
+
+When examining the effect of border lockdown level on pollution levels and of social isolation level on pollution levels, it appears that the number of incident cases of COVID-19 may be directly associated with both exposures (border lockdown level and social isolation level) and indirectly associated with the outcome (pollution levels). In effect, an increase in COVID-19 cases would suggest that stricter measures would be put in place to limit infection transmission. An increase in COVID-19 cases may also suggest a limit in workforce supply, thereby limiting pollution caused by transport and industrial activity for example. These associations imply that the variable fits the classical criteria for confounding. Number of new incident cases per state from December 2018 to March 2020 was determined using a [publicly available dataset](https://github.com/nytimes/covid-19-data).
+
+Python code can be viewed [here](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/COVID19%20Cases/covid_cases_code.ipynb).
+
+## Data Merging
+
+All data were merged together in long format. Python code can be viewed [here](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/Merging/all_datasets_merging_code.ipynb).
+
+## Statistical Analysis
+
+### Pollution Exploratory Data Analysis
+
+```{r}
+# Reading in pollution data
+pol <- read.csv('air_state_pollution_pm25.csv')
+
+# Renaming columns
+names(pol) <- c('date', 'pm', 'state')
+
+# Converting date column to datetime format
+pol$date <- anytime::anydate(pol$date)
+
+# Checking summary of data
+summary(pol)
+
+# Plotting facet plot of pm2.5 variations over time
+ggplot(pol, aes(x = date, y = pm, color = state)) +
+  geom_line() +
+  facet_grid(state~.) +
+  scale_color_brewer(palette="Dark2") +
+  labs(title = 'PM 2.5 Concentration Variations in Different USA States', caption = 'Based on data from: https://www.epa.gov/outdoor-air-quality-data/download-daily-data', x = 'Date', y = 'PM 2.5 Concentration (in μg/m3)') +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+
+There appear to be several outliers of PM 2.5 measurements, particularly in the states of California and Washington.
+
+### Merged data EDA
+
+#### Describe numerically and graphically the relationships between variables
+
+```{r}
+# Reading in merged data
+df.merged <- read.csv('pol_iso_merged.csv')
+
+# Renaming columns
+names(df.merged) <- c('date', 'pm', 'state', 'iso_status', 'cases')
+
+# Setting date column as datetime
+df.merged$date <- anytime::anydate(df.merged$date)
+
+# Releveling iso status in correct order
+df.merged$iso_status <- factor(df.merged$iso_status, levels = c('Normal', 'Emergency', 'SchoolClosure', 'ShelterInPlace'))
+
+# Exploring dataframe
+head(df.merged)
+
+# Exploring dataframe
+summary(df.merged)
+
+# Exploring relationships between pm 2.5 levels, state and isolation status for 2020
+latest.df <- df.merged %>% filter(df.merged$date >= as.Date('2020-01-01'))
+ggpairs(latest.df[ , c('pm', 'iso_status', 'cases')])
+```
+
+When subsetting to 2020, we first observe a weak negative correlation between incidence of COVID-19 cases and PM 2.5 concentration (-0.11). We also observe that there appears to be a difference in PM 2.5 levels between all social distancing measures in place. This plot can be further examined and plotted for the same year (2020).
+
+```{r}
+# Plotting boxplot for iso status and pm 2.5
+ggplot(latest.df, aes(x = iso_status, y = pm)) +
+  geom_boxplot() +
+  labs(x = 'Social Distancing Measures in Place (2020)', y = 'PM 2.5 Concentration (in μg/m3)')
+```
+
+Outliers seem to be slightly affecting the overall levels of PM 2.5 during periods without social distancing measures in place. We observe a slight difference in PM 2.5 concentrations between each increase in level of social distancing measure in the year 2020. It can be argued that the plot seems to be following a somewhat linear trend.
+
+#### Performing simple linear regressions
+
+```{r}
+# SLR with iso status and pm 2.5
+slr.iso <- lm(pm ~ iso_status, data = df.merged)
+summary(slr.iso)
+
+# Displaying confidence intervals
+confint(slr.iso)
+```
+
+Interpretation and comments: When shifting from 'Normal' social distancing status to 'Emergency' social distancing status, we are 95% confident that average PM 2.5 concentrations decrease between 0.73 and 3.15 μg/m3. Although the confidence interval suggests that this may be a significant decrease, we must bear in mind that these are unadjusted estimates and that the standard errors are moderately wide.
+
+```{r}
+# SLR with cases and pm 2.5
+slr.cases <- lm(pm ~ cases, data = df.merged)
+summary(slr.cases)
+
+# Displaying confidence intervals
+confint(slr.cases)
+```
+
+Interpretation and comments: For every increase in 1 case, we are 95% confident that average PM 2.5 concentrations decrease between 0.000008 and 0.000233 μg/m3. Once again, we must bear in mind that these are unadjusted estimates.
+
+```{r}
+# SLR with state and pm 2.5
+slr.state <- lm(pm ~ state, data = df.merged)
+summary(slr.state)
+
+# Displaying confidence intervals
+confint(slr.state)
+```
+
+Interpretation and comments: The states of Massachusetts, New York, Washington and Wisconsin seem to observe significantly lower concentrations of PM 2.5 when compared with California. Once again, although the confidence interval suggests that this may be a significant decrease, we must bear in mind that these are unadjusted estimates and that the standard errors remain moderately wide.
+
+
+```{r}
+# SLR with date and pm 2.5
+slr.date <- lm(pm ~ date, data = df.merged)
+summary(slr.date)
+
+# Displaying confidence intervals
+confint(slr.date)
+```
+
+Interpretation and comments: For every increase in 1 day from January 1st 2018 to March 27th 2020, we are 95% confident that average PM 2.5 concentrations decrease between 0.0003 and 0.0014 μg/m3. Once again, although the confidence interval suggests that this may be a significant decrease, we must bear in mind that these are unadjusted estimates.
+
+#### Checking linearity and independence assumption
+
+Before fitting a full model we can verify the following assumptions:
+
+- Linearity: a case has been made that linearity may be a possibility.
+
+- Independence: a case can be made that all residuals are independent of each other.
+
+#### Fitting a multiple linear regression model including all covariates in the model
+
+```{r}
+# MLR with all covariates
+mlr.pm <- lm(pm ~ iso_status + cases + state + date, data = df.merged)
+summary(mlr.pm)
+
+# Displaying confidence intervals
+confint(mlr.pm)
+```
+
+Interpretation and comments: When compared to 'Normal' social distancing status, we are 95% confident that 'Emergency' social distancing status is associated with an average PM 2.5 concentration decrease of between 0.51 and 2.90 μg/m3, adjusting for incidence of COVID-19 cases, state and date of the year. We observe a very slight decrease in the standard error of the coefficient when compared to the simple linear regression model. The adjusted R-squared shows a poor fit of the model.
+
+#### Checking residuals to verify model assumptions
+
+```{r}
+# Verifying MLR model assumptions
+autoplot(mlr.pm)[1:2]
+```
+
+We observe a large deviation from the 45 degree line in the QQplot. The normality assumption has not been met. The residual plot also shows us that the residuals do not observe a random pattern around the fitted regression line. This is enough evidence to show that the homoscedasticity assumption has not been met, giving us a strong reason to investigate other models. In order to do so, we need to pay closer attention to each covariate. 
+
+Exploring a log transformation may produce a model that meets the linearity and homoscedasticity assumptions.
+
+#### Refitting a multiple linear regression model with log transformation
+
+```{r}
+# MLR with all covariates
+mlr.pmlog <- lm(log(pm) ~ iso_status + cases + state + date, data = df.merged)
+summary(mlr.pmlog)
+
+# Displaying exponentiated confidence intervals
+exp(confint(mlr.pmlog))
+```
+
+Interpretation and comments: When compared to 'Normal' social distancing status, we are 95% confident that 'Emergency' social distancing status is associated with an average PM 2.5 concentration increase of between 0.7 and 0.9 μg/m3, adjusting for incidence of COVID-19 cases, state and date of the year. We observe a very slight decrease in the standard error of the coefficient when compared to the simple linear regression model. The adjusted R-squared shows a poor fit of the model.
+
+#### Checking residuals to verify model assumptions
+
+```{r}
+# Verifying MLR model assumptions
+autoplot(mlr.pmlog)[1:2]
+```
+
+We observe a slight deviation from the 45 degree line in the QQplot. The normality assumption doesn't seem to have been met. The residual plot also shows us that the residuals do not observe a random pattern around the fitted regression line. This is enough evidence to show that the homoscedasticity assumption has not been met. However, the fit of this model seems to be better than that of the previous model. 
+
