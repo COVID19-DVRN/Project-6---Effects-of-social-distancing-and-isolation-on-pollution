@@ -16,5 +16,5 @@ Here is a list of the items contained in this repository:
 
 - **[Statistical Analysis and Reporting (RMarkdown file)](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/Statistical%20Analysis%20and%20Reporting.rmd)**: Markdown file used for the analysis and reporting of the project.
 
-- **[Statistical Analysis and Reporting (HTML file)](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/Statistical%20Analysis%20and%20Reporting.html)**: HTML file used for the reporting of the project.
+- **[Statistical Analysis and Reporting (HTML file)](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/Statistical%20Analysis%20and%20Reporting.html)**: HTML file used for the reporting of the project (you might have to download it to view it for now, PDF will be uploaded when time permits).
 
