@@ -14,7 +14,7 @@ Here is a list of the items contained in this repository:
 
 - **[Social Distancing Levels](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/tree/master/Social%20Distancing%20Levels)**: folder containing raw data files for level of social distancing measures implemented in 6 different states in the USA. Measurse were classified using 4 levels of lockdown from lowest to highest: normal level (no restrictions on movement), emergency state, school shut down and shelter-in-place. Data was categorized manually using [readily available websites](https://en.wikipedia.org/wiki/Timeline_of_the_2020_coronavirus_pandemic_in_the_United_States) categorized from January 2018 to March 2020.
 
-- **[Statistical analysis and reporting for the project (RMarkdown file)](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/Statistical%20Analysis%20and%20Reporting.rmd)**: Markdown file used for the analysis and reporting of the project.
+- **[Statistical Analysis and Reporting (RMarkdown file)](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/Statistical%20Analysis%20and%20Reporting.rmd)**: Markdown file used for the analysis and reporting of the project.
 
-- **[Statistical analysis and reporting for the project (HTML file)](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/Statistical%20Analysis%20and%20Reporting.html)**: HTML file used for the analysis and reporting of the project.
+- **[Statistical Analysis and Reporting (HTML file)](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/Statistical%20Analysis%20and%20Reporting.html)**: HTML file used for the analysis and reporting of the project.
 
