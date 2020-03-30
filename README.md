@@ -4,5 +4,10 @@ This study examined the association between COVID-19 induced social distancing m
 
 ## Getting Started
 
-This is a list of items contained in this repository:
+Here is a list of the items contained in this repository:
 
+- [COVID19 Cases](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/tree/master/COVID19%20Cases): folder containing data and extraction code for the number of incident cases per state from until March 28th 2020, from a [publicly available dataset](https://github.com/nytimes/covid-19-data)
+- [Merging](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/tree/master/Merging): folder containing code for extracting and
+- [Statistical analysis and reporting for the project (RMarkdown file)](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/Statistical%20Analysis%20and%20Reporting.rmd)
+- [Statistical analysis and reporting for the project (HTML file)](https://github.com/COVID19-DVRN/Project-6---Effects-of-social-distancing-and-isolation-on-pollution/blob/master/Statistical%20Analysis%20and%20Reporting.html)
+- 
